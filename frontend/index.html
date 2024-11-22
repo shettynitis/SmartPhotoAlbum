@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Search and Upload</title>
+  <script src="app.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    #results div {
+      text-align: center;
+    }
+    #results img {
+      max-width: 200px;
+      margin: 10px;
+    }
+    .form-section {
+      margin-bottom: 20px;
+    }
+  </style>
+  <!-- api gateway generated sdk -->
+  <script src="./sdk/lib/axios/dist/axios.standalone.js"></script>
+  <script src="./sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+  <script src="./sdk/lib/CryptoJS/rollups/sha256.js"></script>
+  <script src="./sdk/lib/CryptoJS/components/hmac.js"></script>
+  <script src="./sdk/lib/CryptoJS/components/enc-base64.js"></script>
+  <script src="./sdk/lib/url-template/url-template.js"></script>
+  <script src="./sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+  <script src="./sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+  <script src="./sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+  <script src="./sdk/lib/apiGatewayCore/utils.js"></script>
+
+
+  <script src="./sdk/apigClient.js"></script>
+</head>
+<body>
+  <h1>Photo Search and Upload</h1>
+
+  <!-- Search Section -->
+  <div class="form-section">
+    <h2>Search Photos</h2>
+    <input type="text" id="searchQuery" placeholder="Search for photos..." />
+    <button onclick="searchPhotos()">Search</button>
+  </div>
+
+  <!-- Upload Section -->
+  <div class="form-section">
+    <h2>Upload Photo</h2>
+    <form id="uploadForm">
+      <input type="file" id="photo" accept="image/*" required />
+      <input type="text" id="customLabels" placeholder="Custom Labels (comma-separated)" />
+      <button type="button" onclick="uploadPhoto()">Upload</button>
+    </form>
+  </div>
+
+  <!-- Results Section -->
+  <h2>Search Results</h2>
+  <div id="results"></div>
+</body>
+</html>
