@@ -6,6 +6,7 @@ from opensearchpy import OpenSearch, RequestsHttpConnection
 # AWS services
 s3_client = boto3.client('s3')
 rekognition_client = boto3.client('rekognition')
+code_pipeline_client = boto3.client('codepipeline')
 
 # ElasticSearch (OpenSearch) configuration
 ELASTICSEARCH_ENDPOINT = "https://search-photos-2ghhsjv3273wh3sfklasdwuxni.us-east-1.es.amazonaws.com"
@@ -65,12 +66,22 @@ def lambda_handler(event, context):
             id=object_key
         )
 
+                # Notify CodePipeline of success
+        job_id = event['CodePipeline.job']['id']
+        code_pipeline_client.put_job_success_result(jobId=job_id)
+
         return {
             "statusCode": 200,
             "body": json.dumps("Photo indexed successfully!")
         }
     except Exception as e:
         print(f"Error: {e}")
+        if 'CodePipeline.job' in event:
+            job_id = event['CodePipeline.job']['id']
+            code_pipeline_client.put_job_failure_result(jobId=job_id, failureDetails={
+                'type': 'JobFailed',
+                'message': str(e)
+            })
         return {
             "statusCode": 500,
             "body": json.dumps(f"Error: {str(e)}")
