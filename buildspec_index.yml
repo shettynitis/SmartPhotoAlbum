@@ -6,17 +6,18 @@ phases:
       python: 3.9
     commands:
       - echo "Installing dependencies from requirements.txt..."
-      - pip install -r LambdaFunction/LF1/requirements.txt -t ./dependencies  # Install dependencies into a local directory
+      - pip install -r LambdaFunction/LF1/requirements.txt -t LambdaFunction/LF1/dependencies/  # Install dependencies directly into the `dependencies` folder
 
   build:
     commands:
-      - echo "Zipping lambda_function.py and dependencies into LF1.zip..."
-      - zip -r LF1.zip LambdaFunction/LF1/lambda_function.py  # Add the Lambda function file
-      - zip -r LF1.zip ./dependencies/*  # Add all dependencies into the zip file
+      - echo "Packaging lambda_function.py and dependencies into LF1.zip..."
+      - cd LambdaFunction/LF1
+      - zip -r ../../LF1.zip lambda_function.py dependencies/  # Add the Lambda function and dependencies to the zip
+      - cd ../../
       - echo "Build completed. Listing contents of LF1.zip:"
       - ls -la
 
 artifacts:
   files:
-    - LF1.zip  # Includes only LF1.zip in the artifacts
-  discard-paths: yes  # Ensure a flat structure without preserving folder hierarchy
+    - LF1.zip  # Include LF1.zip in the artifacts
+  discard-paths: yes
