@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for photo album application'
+
+Resources:
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: ns6108-frontend
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+  StorageBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: ns6108-photo-storage
+
+  IndexPhotosLambda:
+    Type: AWS::Lambda::Function
+    DeletionPolicy: Delete
+    Properties:
+      FunctionName: index-photos
+      Handler: lambda_function.lambda_handler
+      Role: arn:aws:iam::423623871680:role/AWSLambda_Photo
+      Code:
+        S3Bucket: lambdasam-8815c5726a-us-east-1
+        S3Key: CodeBuildArtifacts/LF2.zip
+      Runtime: python3.11
+
+  SearchPhotosLambda:
+    Type: AWS::Lambda::Function
+    DeletionPolicy: Delete
+    Properties:
+      FunctionName: search-photos
+      Handler: lambda_function.lambda_handler
+      Role: arn:aws:iam::423623871680:role/service-role/search-photos-role-8xw1r6wt
+      Code:
+        S3Bucket: lambdasam-8815c5726a-us-east-1
+        S3Key: CodeBuildArtifacts/LF1.zip
+      Runtime: python3.13
+
+  IndexPhotosLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    DeletionPolicy: Retain
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambda_Photo
+
+  SearchPhotosLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    DeletionPolicy: Retain
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/search-photos-role-8xw1r6wt
+
+  PhotoAlbumAPI:
+    Type: AWS::ApiGateway::RestApi
+    DeletionPolicy: Delete
+    Properties:
+      Name: AI Photo Search
+      Description: API for photo album application
+
+# Outputs:
+#   FrontendURL:
+#     Description: "Frontend S3 Bucket URL"
+#     Value: !GetAtt FrontendBucket.WebsiteURL
