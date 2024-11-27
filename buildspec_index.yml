@@ -5,16 +5,18 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
-      - echo "No dependencies to install."
+      - echo "Installing dependencies from requirements.txt..."
+      - pip install -r LambdaFunction/LF1/requirements.txt -t ./dependencies  # Install dependencies into a local directory
 
   build:
     commands:
-      - echo "Zipping LF1..."
-      - zip -rj LF1.zip LambdaFunction/LF1/* 
-      - echo "Checking if LF1.zip exists:"
+      - echo "Zipping lambda_function.py and dependencies into LF1.zip..."
+      - zip -r LF1.zip LambdaFunction/LF1/lambda_function.py  # Add the Lambda function file
+      - zip -r LF1.zip ./dependencies/*  # Add all dependencies into the zip file
+      - echo "Build completed. Listing contents of LF1.zip:"
       - ls -la
 
 artifacts:
   files:
-    - LF1.zip
-  discard-paths: yes
+    - LF1.zip  # Includes only LF1.zip in the artifacts
+  discard-paths: yes  # Ensure a flat structure without preserving folder hierarchy
