@@ -5,12 +5,12 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
-      - echo "Dependencies are already installed. Skipping installation."
+      - echo "No dependencies to install."
+
   build:
     commands:
       - echo "Zipping LF1..."
-      - mkdir -p build-artifacts # Ensure the directory exists
-      - cd LambdaFunction/LF1 && zip -r ../../LF1.zip . && cd ../../
+      - zip -j LF1.zip LambdaFunction/LF1/* 
       - echo "Checking if LF1.zip exists:"
       - ls -la
 
@@ -18,4 +18,3 @@ artifacts:
   files:
     - LF1.zip
   discard-paths: yes
-  type: zip
