@@ -10,12 +10,12 @@ phases:
     commands:
       - echo "Zipping LF1..."
       - mkdir -p build-artifacts # Ensure the directory exists
-      - cd LambdaFunction/LF1 && zip -r ../../build-artifacts/LF1.zip . && cd ../../
+      - cd LambdaFunction/LF1 && zip -r ../../LF1.zip . && cd ../../
       - echo "Checking if LF1.zip exists:"
-      - ls -la build-artifacts
+      - ls -la
 
 artifacts:
   files:
-    - build-artifacts/LF1.zip
+    - LF1.zip
   discard-paths: yes
   type: zip
