@@ -18,5 +18,9 @@ phases:
 artifacts:
   files:
     - LF1.zip
-    - LF2.zip
+  secondary-artifacts:
+    LF2Artifact:
+      files:
+        - LF2.zip
+        
   base-directory: .
