@@ -19,3 +19,4 @@ artifacts:
   files:
     - LF1.zip
     - LF2.zip
+  base-directory: .
