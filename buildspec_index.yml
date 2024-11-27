@@ -1,23 +1,18 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
       python: 3.9
     commands:
-      - echo "Installing dependencies from requirements.txt..."
-      - pip install -r LambdaFunction/LF1/requirements.txt -t LambdaFunction/LF1/dependencies/  # Install dependencies directly into the `dependencies` folder
-
+      - echo "Installing dependencies..."
+      - pip install -r LambdaFunction/LF1/requirements.txt -t LambdaFunction/LF1/
   build:
     commands:
-      - echo "Packaging lambda_function.py and dependencies into LF1.zip..."
-      - cd LambdaFunction/LF1
-      - zip -r ../../LF1.zip lambda_function.py dependencies/  # Add the Lambda function and dependencies to the zip
-      - cd ../../
-      - echo "Build completed. Listing contents of LF1.zip:"
-      - ls -la
-
+      - echo "Packaging Lambda function..."
+      - cd LambdaFunction/LF1 && zip -r ../../LF1.zip . && cd ../../
+      - echo "Build completed. Verifying package contents..."
+      - ls -la LF1.zip
 artifacts:
   files:
-    - LF1.zip  # Include LF1.zip in the artifacts
+    - LF1.zip
   discard-paths: yes
