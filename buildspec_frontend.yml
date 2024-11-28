@@ -16,4 +16,4 @@ phases:
 artifacts:
   files:
     - '**/*'  # Include all files from the 'frontend' directory
-  discard-paths: yes
+  discard-paths: no
