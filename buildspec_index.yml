@@ -16,5 +16,4 @@ phases:
 artifacts:
   files:
     - LF1.zip
-    - appspec.yml  # Include the AppSpec file in the artifact
   discard-paths: yes
