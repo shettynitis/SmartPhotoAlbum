@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - echo "No dependencies..."
+  build:
+    commands:
+      - echo "Packaging Lambda function..."
+      - cd frontend && zip -r ../frontend.zip . && cd ../
+      - echo "Build completed. Verifying package contents..."
+      - ls -la frontend.zip
+
+artifacts:
+  files:
+    - frontend.zip
+  discard-paths: yes
