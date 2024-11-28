@@ -2,16 +2,12 @@ import json
 import boto3
 import datetime
 from opensearchpy import OpenSearch, RequestsHttpConnection
-
 # AWS services
 s3_client = boto3.client('s3')
 rekognition_client = boto3.client('rekognition')
-code_pipeline_client = boto3.client('codepipeline')
-
 # ElasticSearch (OpenSearch) configuration
 ELASTICSEARCH_ENDPOINT = "https://search-photos-2ghhsjv3273wh3sfklasdwuxni.us-east-1.es.amazonaws.com"
 INDEX_NAME = "photos"
-
 # Initialize OpenSearch client
 es_client = OpenSearch(
     hosts=[{'host':'search-photos-2ghhsjv3273wh3sfklasdwuxni.us-east-1.es.amazonaws.com', 'port': 443}],
@@ -20,7 +16,6 @@ es_client = OpenSearch(
     verify_certs=True,
     connection_class=RequestsHttpConnection
 )
-
 def lambda_handler(event, context):
     try:
         # Get the S3 bucket and object key from the event
@@ -38,7 +33,6 @@ def lambda_handler(event, context):
             MaxLabels=10
         )
         labels = [label['Name'] for label in rekognition_response['Labels']]
-
         # Retrieve custom metadata from S3
         metadata_response = s3_client.head_object(
             Bucket=bucket_name,
@@ -50,7 +44,6 @@ def lambda_handler(event, context):
         print(f"Custom Labels: {custom_labels}")
         # Combine Rekognition and custom labels
         all_labels = labels + custom_labels_list
-
         # Create the JSON object
         photo_metadata = {
             "objectKey": object_key,
@@ -58,32 +51,19 @@ def lambda_handler(event, context):
             "createdTimestamp": datetime.datetime.now().isoformat(),
             "labels": all_labels
         }
-
         # Index the JSON object in ElasticSearch
         es_client.index(
             index=INDEX_NAME,
             body=photo_metadata,
             id=object_key
         )
-
-                # Notify CodePipeline of success
-        job_id = event['CodePipeline.job']['id']
-        code_pipeline_client.put_job_success_result(jobId=job_id)
-
         return {
             "statusCode": 200,
             "body": json.dumps("Photo indexed successfully!")
         }
     except Exception as e:
         print(f"Error: {e}")
-        if 'CodePipeline.job' in event:
-            job_id = event['CodePipeline.job']['id']
-            code_pipeline_client.put_job_failure_result(jobId=job_id, failureDetails={
-                'type': 'JobFailed',
-                'message': str(e)
-            })
         return {
             "statusCode": 500,
             "body": json.dumps(f"Error: {str(e)}")
         }
-

@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - echo "No dependencies..."
+  build:
+    commands:
+      - echo "Preparing files for deployment..."
+      - cd frontend
+      - echo "Build completed. Verifying package contents..."
+      - ls -la
+
+artifacts:
+  files:
+    - '**/*'  # Include all files from the 'frontend' directory
+  base-directory: frontend  # Specify the frontend directory as the base
+  discard-paths: no  # Keep the file paths relative to the base directory
