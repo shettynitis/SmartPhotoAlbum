@@ -1,26 +1,25 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
       python: 3.9
     commands:
-      - echo "Dependencies are already installed. Skipping installation."
+      - echo "Installing dependencies..."
+      - pip install -r LambdaFunction/LF1/requirements.txt -t LambdaFunction/LF1/
   build:
     commands:
-      - echo "Zipping LF1..."
+      - echo "Packaging Lambda function..."
       - cd LambdaFunction/LF1 && zip -r ../../LF1.zip . && cd ../../
+      - echo "Build completed. Verifying package contents..."
+      - ls -la LF1.zip
+      - aws lambda update-function-code --function-name index-photos --zip-file fileb://LF1.zip
       - echo "Zipping LF2..."
       - cd LambdaFunction/LF2 && zip -r ../../LF2.zip . && cd ../../
-      - echo "Checking if LF1.zip and LF2.zip exist:"
-      - ls -la
+      - ls -la LF2.zip
+      - aws lambda update-function-code --function-name search-photos --zip-file fileb://LF2.zip
 
 artifacts:
   files:
     - LF1.zip
-  secondary-artifacts:
-    LF2Artifact:
-      files:
-        - LF2.zip
-        
-  base-directory: .
+    - LF2.zip
+  discard-paths: yes
