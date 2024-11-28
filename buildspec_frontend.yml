@@ -16,4 +16,5 @@ phases:
 artifacts:
   files:
     - '**/*'  # Include all files from the 'frontend' directory
-  discard-paths: no
+  base-directory: frontend  # Specify the frontend directory as the base
+  discard-paths: no  # Keep the file paths relative to the base directory
