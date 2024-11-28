@@ -12,6 +12,7 @@ phases:
       - cd LambdaFunction/LF1 && zip -r ../../LF1.zip . && cd ../../
       - echo "Build completed. Verifying package contents..."
       - ls -la LF1.zip
+      - aws lambda update-function-code --function-name index-photos --zip-file fileb://LF1.zip
 
 artifacts:
   files:
