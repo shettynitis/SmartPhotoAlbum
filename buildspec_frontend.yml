@@ -1,4 +1,5 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
@@ -7,12 +8,12 @@ phases:
       - echo "No dependencies..."
   build:
     commands:
-      - echo "Packaging Lambda function..."
-      - cd frontend && zip -r ../frontend.zip . && cd ../
+      - echo "Preparing files for deployment..."
+      - cd frontend
       - echo "Build completed. Verifying package contents..."
-      - ls -la frontend.zip
+      - ls -la
 
 artifacts:
   files:
-    - frontend.zip
+    - '**/*'  # Include all files from the 'frontend' directory
   discard-paths: yes
