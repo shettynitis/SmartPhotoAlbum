@@ -12,7 +12,9 @@ phases:
       - cd LambdaFunction/LF1 && zip -r ../../LF1.zip . && cd ../../
       - echo "Build completed. Verifying package contents..."
       - ls -la LF1.zip
+      - cp appspec.yml ./  # Copy appspec.yml into the build output directory
 artifacts:
   files:
     - LF1.zip
+    - appspec.yml  # Include the AppSpec file in the artifact
   discard-paths: yes
