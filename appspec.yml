@@ -5,3 +5,5 @@ Resources:
       Properties:
         Name: index-photos  # Replace with your Lambda function name
         Alias: live  # Specify the alias (create one if it doesn’t exist)
+        CurrentVersion: 1  # Set to the version currently associated with the alias
+        TargetVersion: 2  # Set to the version you want to deploy
