@@ -96,23 +96,20 @@ async function uploadPhoto() {
     return;
   }
 
-  const params = {
-    'x-amz-meta-customLabels': customLabels,
-    'objects': file.name // The path parameter {objects} is the file name
-  };
-  const body = file; // The binary file data
-  console.log(file)
-  const additionalParams = {
-    headers: {
-      'Content-Type': file.type,
-      'x-amz-meta-customLabels': customLabels,
-      'x-api-key': API_KEY
-    }
-  };
+  const uploadUrl = `${UPLOAD_API_URL}/${file.name}`;
 
   try {
-    const result = await apigClient.photosObjectsPut(params, body, additionalParams);
-    if (result.status === 200 || result.status === 201) {
+    const response = await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': file.type,
+        'x-amz-meta-customLabels': customLabels,
+        'x-api-key': API_KEY,
+      },
+      body: file,
+    });
+
+    if (response.ok) {
       alert('Photo uploaded successfully!');
     } else {
       alert('Failed to upload photo.');

@@ -1,8 +1,0 @@
-version: 0.0
-Resources:
-  - myLambdaFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        Name: index-photos  # Replace with your Lambda function name
-        Alias: live  # Specify the alias (create one if it doesn’t exist)
-        CurrentVersion: 1  # Set to the version currently associated with the alias
