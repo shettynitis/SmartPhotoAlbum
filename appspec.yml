@@ -1,0 +1,7 @@
+version: 0.0
+Resources:
+  - myLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: index-photos  # Your Lambda function name
+        CurrentVersion: 1   # Use the current version for deployment
