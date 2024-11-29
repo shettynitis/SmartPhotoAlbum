@@ -22,7 +22,7 @@ Resources:
     Properties:
       FunctionName: index-photos
       Handler: lambda_function.lambda_handler
-      Role: arn:aws:iam::423623871680:role/AWSLambda_Photo
+      Role: !GetAtt IndexPhotosLambdaExecutionRole.Arn
       Code:
         S3Bucket: lambdasam-8815c5726a-us-east-1
         S3Key: CodeBuildArtifacts/LF2.zip
@@ -34,11 +34,11 @@ Resources:
     Properties:
       FunctionName: search-photos
       Handler: lambda_function.lambda_handler
-      Role: arn:aws:iam::423623871680:role/service-role/search-photos-role-8xw1r6wt
+      Role: !GetAtt SearchPhotosLambdaExecutionRole.Arn
       Code:
         S3Bucket: lambdasam-8815c5726a-us-east-1
         S3Key: CodeBuildArtifacts/LF1.zip
-      Runtime: python3.13
+      Runtime: python3.11
 
   IndexPhotosLambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -52,7 +52,8 @@ Resources:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambda_Photo
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
   SearchPhotosLambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -66,7 +67,8 @@ Resources:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/search-photos-role-8xw1r6wt
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
   PhotoAlbumAPI:
     Type: AWS::ApiGateway::RestApi
@@ -74,8 +76,3 @@ Resources:
     Properties:
       Name: AI Photo Search
       Description: API for photo album application
-
-# Outputs:
-#   FrontendURL:
-#     Description: "Frontend S3 Bucket URL"
-#     Value: !GetAtt FrontendBucket.WebsiteURL
